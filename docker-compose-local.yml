@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  image-history-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: image_history
+    restart: always
+    volumes:
+      - .:/image_history/
+    command: >
+      sh -c "python3 manage.py showmigrations &&
+             python3 manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "9049:8000"
+    container_name: image-history-web
+
+    depends_on:
+      - image_history_db
+    stdin_open: true
+    tty: true
+
+  image_history_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Pa55word!
+      POSTGRES_DB: image_history
+    ports:
+      - "5434:5432"
+    container_name: image_history_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
