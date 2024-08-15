@@ -1,0 +1,55 @@
+Image History API
+This Django-based web application manages user interactions with images. The project tracks user actions, provides a history of interactions, and supports user registration and verification via OTP.
+
+Models
+    User
+    mobile_number: User's mobile number (String, max 15 chars, Mandatory)
+    name: User's name (String, max 100 chars, Non-mandatory)
+    otp: One-time password for verification (String, max 6 chars, Non-mandatory)
+    is_verified: Indicates if the user is verified (Boolean, Mandatory)
+Interaction
+    user: Reference to the User model (ForeignKey, Mandatory)
+    image_name: Name of the image interacted with (String, max 50 chars, Mandatory)
+    action: Action taken by the user on the image (String, from choices, Mandatory)
+    timestamp: Time of interaction (DateTime, auto, Mandatory)
+Image
+    name: Name of the image (String, max 100 chars, Mandatory)
+    url: URL of the image (URL, max 200 chars, Mandatory)
+
+
+API Endpoints
+    Register: Register a user with a mobile number and send an OTP.
+    Verify OTP: Verify the user's OTP and update their verification status.
+    Homepage: Retrieve a list of images.
+    Image Interaction: Record a user's action (e.g., accepted, rejected) on an image.
+    History: Retrieve a user's interaction history.
+
+
+Usage
+    Run the project:
+    bash
+    Copy code
+    python manage.py runserver
+    Run tests:
+    bash
+    Copy code
+    python manage.py test
+
+Docker Setup
+    Dockerfile: Configures the Docker environment for the Django application.
+    docker-compose.yml: Orchestrates the application and database containers.
+Commands : 
+    1. Build - docker-compose -f docker-compose-local.yml up --build -d
+    2. Load images: docker exec -it image-history-web bash and then exectue this line : python manage.py shell
+            Inside the shell run this commands
+            from image_app.models import Image
+
+            Image.objects.create(name="One", url="http://getdrawings.com/get-icon#one-icon-3.png")
+            Image.objects.create(name="Two", url="http://getdrawings.com/get-icon#free-shirt-icon-9.png")
+            Image.objects.create(name="Three", url="http://getdrawings.com/get-icon#serial-number-icon-19.png")
+            Image.objects.create(name="Four", url="http://getdrawings.com/get-icon#serial-number-icon-18.png")
+            Image.objects.create(name="Five", url="http://getdrawings.com/get-icon#number-one-icon-17.png")
+
+
+Database
+    PostgreSQL: Used as the database backend for storing user data, interactions, and images.
